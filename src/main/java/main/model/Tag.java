@@ -1,0 +1,23 @@
+package main.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
+
+@AllArgsConstructor
+@Data
+@Entity
+@Table(name="tags")
+public class Tag implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String name;
+
+    @OneToMany(mappedBy = "tag")
+    private List<TagPost> posts;
+
+}

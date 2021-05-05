@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -18,6 +19,6 @@ public class Tag implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "tag")
-    private List<TagPost> posts;
+    private List<TagPost> posts = new ArrayList<>();
 
 }

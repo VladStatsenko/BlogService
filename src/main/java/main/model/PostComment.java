@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,5 +33,5 @@ public class PostComment implements Serializable {
     private String text;
 
     @OneToMany
-    private List<PostComment> children;
+    private List<PostComment> children = new ArrayList<>();
 }

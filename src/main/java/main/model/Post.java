@@ -10,6 +10,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,16 +49,16 @@ public class Post implements Serializable {
     @OneToMany(mappedBy = "post")
     @LazyCollection(LazyCollectionOption.EXTRA)
     @Where(clause = "value = 1")
-    private List<PostVoters> likes;
+    private List<PostVoters> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
     @LazyCollection(LazyCollectionOption.EXTRA)
     @Where(clause = "value = -1")
-    private List<PostVoters> dislikes;
+    private List<PostVoters> dislikes = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
-    private List<TagPost> tags;
+    private List<TagPost> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
-    private List<PostComment> comments;
+    private List<PostComment> comments = new ArrayList<>();
 }

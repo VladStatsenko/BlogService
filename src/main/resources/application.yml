@@ -2,3 +2,10 @@ spring.datasource.url: jdbc:mysql://localhost:3306/blogservice
 spring.datasource.username: vlad
 spring.datasource.password: testtest
 spring.jpa.hibernate.ddl-auto: update
+
+blog.title: DevPub
+blog.subtitle: Рассказы разработчиков
+blog.phone: +7 915 861-73-63
+blog.email: vladStatsenko1@gmail.com
+blog.copyright: Стаценко Владислав
+blog.copyrightFrom: 2021

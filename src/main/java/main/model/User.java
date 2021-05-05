@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,16 +29,16 @@ public class User implements Serializable {
     private String photo;
 
     @OneToMany(mappedBy = "user")
-    private List<Post> posts;
+    private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<PostVoters> postVoters;
+    private List<PostVoters> postVoters = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<PostComment> postComments;
+    private List<PostComment> postComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "moderator")
-    private List<Post> moderatorPosts;
+    private List<Post> moderatorPosts = new ArrayList<>();
 
 
 }

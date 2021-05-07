@@ -1,0 +1,80 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-lesson1.yaml
+  - changeSet:
+      id: 1
+      author: vStastenko
+      comment: "add db"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: is_moderator
+                  value: 1
+              - column:
+                  name: reg_time
+                  value: "2020-12-02 12:25:25"
+              - column:
+                  name: name
+                  value: "Vlad"
+              - column:
+                  name: email
+                  value: "dddd@mail.ru"
+              - column:
+                  name: password
+                  value: "123456789"
+              - column:
+                  name: code
+                  value: "TITLE"
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "NEW"
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: time
+                  value: "2020-12-02 12:35:25"
+              - column:
+                  name: title
+                  value: "TITLE"
+              - column:
+                  name: 'text'
+                  value: "rivet"
+              - column:
+                  name: view_count
+                  value: 0
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "JAVA"
+      rollback:
+        - delete:
+            tableName: users
+            where: id in (1)
+        - delete:
+            tableName: posts
+            where: id in (1)
+        - delete:
+            tableName: tags
+            where: id in (1)

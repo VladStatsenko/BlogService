@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 public class PostService {
     public PostResponse post(){
         PostResponse postResponse = new PostResponse();
+        postResponse.getCount();
+        postResponse.getPosts();
         return postResponse;
     }
 }

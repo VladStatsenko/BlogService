@@ -3,7 +3,7 @@ databaseChangeLog:
   - changeSet:
       id: 1
       author: vStastenko
-      comment: "add db"
+      comment: "add data db"
       changes:
         - insert:
             tableName: users
@@ -40,7 +40,7 @@ databaseChangeLog:
                   value: 1
               - column:
                   name: moderation_status
-                  value: "NEW"
+                  value: "ACCEPTED"
               - column:
                   name: moderator_id
                   value: 1
@@ -68,13 +68,183 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "JAVA"
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: time
+                  value: "2020-12-02 12:25:25"
+              - column:
+                  name: value
+                  value: 1
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: tag_id
+                  value: 1
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: parent_id
+                  value: 1
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: time
+                  value: "2021-01-02 12:25:25"
+              - column:
+                  name: text
+                  value: "nice"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: is_moderator
+                  value: 1
+              - column:
+                  name: reg_time
+                  value: "2021-02-02 12:25:25"
+              - column:
+                  name: name
+                  value: "Alex"
+              - column:
+                  name: email
+                  value: "ddd@mail.ru"
+              - column:
+                  name: password
+                  value: "123456789"
+              - column:
+                  name: code
+                  value: "TITLE"
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: moderator_id
+                  value: 2
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: time
+                  value: "2020-03-02 12:35:25"
+              - column:
+                  name: title
+                  value: "POST"
+              - column:
+                  name: 'text'
+                  value: "Откройте файл API.pdf и изучите запросы, которые требуется реализовать в результате работы над дипломом.
+
+                                        При запуске проекта и перехода у вас будет открыта страница с ошибкой 404, так как запросы, которые отправляет фронтенд не реализованы в нашем приложении. Задача этого этапа реализовать запросы главной страницы чтобы открывалась главная страница без ошибок."
+              - column:
+                  name: view_count
+                  value: 3
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: "PHP"
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: post_id
+                  value: 2
+              - column:
+                  name: time
+                  value: "2020-04-02 12:25:25"
+              - column:
+                  name: value
+                  value: 4
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: post_id
+                  value: 2
+              - column:
+                  name: tag_id
+                  value: 1
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: parent_id
+                  value: 2
+              - column:
+                  name: post_id
+                  value: 2
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: time
+                  value: "2021-04-02 12:35:25"
+              - column:
+                  name: text
+                  value: "wow"
       rollback:
         - delete:
             tableName: users
-            where: id in (1)
+            where: id in (1,2)
         - delete:
             tableName: posts
-            where: id in (1)
+            where: id in (1,2)
         - delete:
             tableName: tags
-            where: id in (1)
+            where: id in (1,2)
+        - delete:
+            tableName: post_comments
+            where: id in (1,2)

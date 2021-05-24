@@ -103,6 +103,11 @@
             <artifactId>liquibase-hibernate5</artifactId>
             <version>3.6</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.cage</groupId>
+            <artifactId>cage</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 </project>

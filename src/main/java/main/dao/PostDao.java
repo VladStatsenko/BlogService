@@ -4,6 +4,10 @@ import main.model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 public interface PostDao {
 
     Page<Post> findAllPosts(Pageable pageable);
@@ -11,4 +15,17 @@ public interface PostDao {
     Page<Post> findByLikes(Pageable pageable);
 
     Page<Post> findByComments(Pageable pageable);
+
+    Page<Post> postsSearch(Pageable pageable,String searchQuery);
+
+    List<Post> findPostsByYear( Date from, Date to);
+
+    List<Date> findAllPublicationDate();
+
+    Page<Post> findByDate(Pageable pageable,Date from, Date to);
+
+    Page<Post> findByTag(Pageable pageable, String tag);
+
+    Optional<Post> findById(int id);
+
 }

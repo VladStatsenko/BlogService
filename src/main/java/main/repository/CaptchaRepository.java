@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CaptchaRepository extends JpaRepository<Captcha,Integer> {
 
-    @Query(value = "select upper(:code)=c.code " +
-            "from Captcha c where :secret=c.secretCode")
+    @Query(value = "SELECT upper(:code)=c.code " +
+            "FROM Captcha c WHERE :secret=c.secretCode")
     boolean findByCode(@Param("code") String code , @Param("secret") String secret);
 
-    @Query(value = "delete from Captcha c where c.time<NOW() -:interval * INTERVAL '1' hour",nativeQuery = true)
+    @Query(value = "DELETE FROM Captcha c WHERE c.time<NOW() -:interval * INTERVAL '1' hour",nativeQuery = true)
     Captcha dropCaptcha(@Param("interval") int hour);
 }

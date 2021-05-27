@@ -10,9 +10,9 @@ import java.util.List;
 @Repository
 public interface TagRepository extends CrudRepository<Tag, Integer> {
 
-    @Query(value = "select p.tags from Post p")
+    @Query(value = "SELECT p.tags FROM Post p")
     List<Tag> findFreq();
 
-    @Query(value = "select t from Tag t")
+    @Query(value = "SELECT t FROM Tag t")
     List<Tag> findAll();
 }

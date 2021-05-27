@@ -28,4 +28,6 @@ public interface PostDao {
 
     Optional<Post> findById(int id);
 
+    Page<Post> findPostsModeration(Pageable pageable);
+
 }

@@ -68,5 +68,10 @@ public class PostDaoImpl implements PostDao {
         return postRepository.findById(id);
     }
 
+    @Override
+    public Page<Post> findPostsModeration(Pageable pageable) {
+        return postRepository.findPostsModeration(pageable);
+    }
+
 
 }

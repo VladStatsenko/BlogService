@@ -2,6 +2,248 @@ databaseChangeLog:
   - logicalFilePath: db/changelog/db.changelog-lesson1.yaml
   - changeSet:
       id: 1
+      author: vStatsenko
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: is_moderator
+                  type: TINYINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reg_time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: code
+                  type: varchar(255)
+              - column:
+                  name: photo
+                  type: TEXT
+        - createTable:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: TINYINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: moderation_status
+                  type: ENUM("NEW","ACCEPTED","DECLINED")
+                  constraints:
+                    nullable: false
+              - column:
+                  name: moderator_id
+                  type: INT
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: view_count
+                  type: INT
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: post_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: TINYINT
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: tags
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: post_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tag_id
+                  type: INT
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: parent_id
+                  type: INT
+              - column:
+                  name: post_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: TEXT
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: captcha_codes
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: code
+                  type: TINYTEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: secret_code
+                  type: TINYTEXT
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: global_settings
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: code
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 2
       author: vStastenko
       comment: "add data db"
       changes:

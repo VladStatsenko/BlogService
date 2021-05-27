@@ -29,7 +29,7 @@ public class Post implements Serializable {
     @Column(name = "moderation_status")
     private ModerationStatus status;
     @ManyToOne
-    @JoinColumn(name = "moderation_id")
+    @JoinColumn(name = "moderator_id")
     private User moderator;
 
     @ManyToOne

@@ -7,12 +7,15 @@ import main.api.response.body.PostBody;
 import main.dao.PostDao;
 import main.model.Tag;
 import main.model.TagPost;
+import main.model.User;
+import main.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

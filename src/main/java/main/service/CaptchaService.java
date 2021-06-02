@@ -5,6 +5,7 @@ import com.github.cage.GCage;
 import main.api.response.CaptchaResponse;
 import main.model.Captcha;
 import main.repository.CaptchaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class CaptchaService {
     private final String DATA_TYPE_PREFIX = "data:image/png;base64, ";
     private final CaptchaRepository captchaRepository;
 
-
+    @Autowired
     public CaptchaService(CaptchaRepository captchaRepository) {
         this.captchaRepository = captchaRepository;
     }

@@ -1,40 +1,53 @@
 package main.controllers;
 
+import main.api.request.body.LoginRequest;
 import main.api.request.body.RegisterRequest;
 import main.api.response.CaptchaResponse;
-import main.api.response.CheckResponse;
+import main.api.response.LoginResponse;
 import main.api.response.RegisterResponse;
 import main.service.CaptchaService;
-import main.service.CheckService;
+import main.service.LoginService;
 import main.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api")
 public class ApiAuthController {
-    private final CheckService checkService;
     private final CaptchaService captchaService;
     private final UserService userService;
+    private final LoginService loginService;
 
-    public ApiAuthController(CheckService checkService, CaptchaService captchaService, UserService userService) {
-        this.checkService = checkService;
+
+    @Autowired
+    public ApiAuthController(CaptchaService captchaService, UserService userService, LoginService loginService) {
         this.captchaService = captchaService;
         this.userService = userService;
+        this.loginService = loginService;
+    }
+
+    @PostMapping("/auth/login")
+    public LoginResponse login(@RequestBody LoginRequest loginRequest) {
+        return loginService.login(loginRequest);
     }
 
 
     @GetMapping("/auth/check")
-    private CheckResponse check() {
-        return checkService.GetCheck();
+    public LoginResponse check(Principal principal) {
+        return loginService.check(principal);
     }
 
     @GetMapping("/auth/captcha")
-    private CaptchaResponse captcha() {
+    public CaptchaResponse captcha() {
         return captchaService.getCaptcha();
     }
 
     @PostMapping("/auth/register")
-    private RegisterResponse register(@RequestBody RegisterRequest request) {
+    public RegisterResponse register(@RequestBody RegisterRequest request) {
         return userService.registerUser(request);
     }
+
+
 }

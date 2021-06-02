@@ -21,7 +21,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private boolean isModerator;
+    private int isModerator;
     private LocalDateTime regTime;
     private String name;
     private String email;
@@ -41,5 +41,7 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "moderator")
     private List<Post> moderatorPosts = new ArrayList<>();
 
-
+    public Role getRole(){
+        return isModerator == 1 ? Role.MODERATOR : Role.USER;
+    }
 }

@@ -7,6 +7,7 @@ import main.api.response.TagResponse;
 import main.service.GeneralService;
 import main.service.SettingsService;
 import main.service.TagService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ public class ApiGeneralController {
     private final TagService tagService;
     private final GeneralService generalService;
 
-
+    @Autowired
     public ApiGeneralController(InitResponse initResponse, SettingsService settingsService, TagService tagService, GeneralService generalService) {
         this.initResponse = initResponse;
         this.settingsService = settingsService;
@@ -28,22 +29,22 @@ public class ApiGeneralController {
     }
 
     @GetMapping("/init")
-    private InitResponse init() {
+    public InitResponse init() {
         return initResponse;
     }
 
     @GetMapping("/settings")
-    private SettingsResponse settings() {
+    public SettingsResponse settings() {
         return settingsService.getGlobalSettings();
     }
 
     @GetMapping("/tag")
-    private TagResponse tag() {
+    public TagResponse tag() {
         return tagService.getTags();
     }
 
     @GetMapping("/calendar")
-    private CalendarResponse getCalendar(Integer year){
+    public CalendarResponse getCalendar(Integer year){
         return generalService.getPostsByYear(year);
     }
 

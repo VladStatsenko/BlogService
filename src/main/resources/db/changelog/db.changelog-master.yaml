@@ -267,7 +267,7 @@ databaseChangeLog:
                   value: "dddd@mail.ru"
               - column:
                   name: password
-                  value: "123456789"
+                  value: "$2y$12$fjwA2ddp5HkcHxvohMZoWOMnutspY17HAGBCoOZ1q//BkCuy6F2d6 "
               - column:
                   name: code
                   value: "TITLE"
@@ -381,7 +381,7 @@ databaseChangeLog:
                   value: "ddd@mail.ru"
               - column:
                   name: password
-                  value: "123456789"
+                  value: "$2y$12$fjwA2ddp5HkcHxvohMZoWOMnutspY17HAGBCoOZ1q//BkCuy6F2d6 "
               - column:
                   name: code
                   value: "TITLE"

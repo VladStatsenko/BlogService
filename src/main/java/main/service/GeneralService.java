@@ -3,6 +3,7 @@ package main.service;
 import main.api.response.CalendarResponse;
 import main.dao.PostDao;
 import main.model.Post;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 public class GeneralService {
 
     private final PostDao postDao;
-
+    @Autowired
     public GeneralService(PostDao postDao) {
         this.postDao = postDao;
     }

@@ -6,6 +6,9 @@ import main.api.response.body.ErrorBody;
 import main.model.User;
 import main.repository.CaptchaRepository;
 import main.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +19,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final CaptchaRepository captchaRepository;
 
+    @Autowired
     public UserService(UserRepository userRepository, CaptchaRepository captchaRepository) {
         this.userRepository = userRepository;
         this.captchaRepository = captchaRepository;
@@ -47,8 +51,8 @@ public class UserService {
             user.setName(registerRequest.getName());
             user.setEmail(registerRequest.getEmail().toLowerCase());
             user.setRegTime(LocalDateTime.now(ZoneId.systemDefault()));
-            user.setPassword(registerRequest.getPassword());
-            user.setModerator(false);
+            user.setPassword(passwordEncoder().encode(registerRequest.getPassword()));
+            user.setIsModerator(0);
         } else {
             registerResponse.setErrors(errorBody);
         }
@@ -66,5 +70,10 @@ public class UserService {
         return password != null
                 && password.length() <= 6;
     }
+
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
+    }
+
 
 }

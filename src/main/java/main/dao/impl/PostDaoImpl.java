@@ -39,12 +39,12 @@ public class PostDaoImpl implements PostDao {
     }
 
     @Override
-    public Page<Post> postsSearch(Pageable pageable , String searchQuery) {
-        return postRepository.postsSearch(pageable,searchQuery);
+    public Page<Post> postsSearch(Pageable pageable, String searchQuery) {
+        return postRepository.postsSearch(pageable, searchQuery);
     }
 
     @Override
-    public List<Post> findPostsByYear( Date from, Date to) {
+    public List<Post> findPostsByYear(Date from, Date to) {
         return postRepository.findPostsByYear(from, to);
     }
 
@@ -60,7 +60,7 @@ public class PostDaoImpl implements PostDao {
 
     @Override
     public Page<Post> findByTag(Pageable pageable, String tag) {
-        return postRepository.findByTag(pageable,tag);
+        return postRepository.findByTag(pageable, tag);
     }
 
     @Override
@@ -69,9 +69,18 @@ public class PostDaoImpl implements PostDao {
     }
 
     @Override
-    public Page<Post> findPostsModeration(Pageable pageable) {
-        return postRepository.findPostsModeration(pageable);
+    public Page<Post> findPostModeration(String status, Pageable pageable) {
+        return postRepository.findPostModeration(status, pageable);
     }
 
+    @Override
+    public Page<Post> findMyActivePosts(Pageable pageable, String status, int id) {
+        return postRepository.findMyActivePosts(pageable, status, id);
+    }
+
+    @Override
+    public Page<Post> findMyInactivePosts(Pageable pageable, int active) {
+        return postRepository.findMyInactivePosts(pageable, active);
+    }
 
 }

@@ -28,6 +28,10 @@ public interface PostDao {
 
     Optional<Post> findById(int id);
 
-    Page<Post> findPostsModeration(Pageable pageable);
+    Page<Post> findPostModeration(String status,Pageable pageable);
+
+    Page<Post> findMyActivePosts(Pageable pageable,String status,int id);
+
+    Page<Post> findMyInactivePosts(Pageable pageable,int active);
 
 }

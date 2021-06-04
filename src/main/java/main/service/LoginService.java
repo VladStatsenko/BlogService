@@ -11,8 +11,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
 @Service
@@ -27,29 +30,36 @@ public class LoginService {
         this.userRepository = userRepository;
     }
 
-    public LoginResponse login(LoginRequest loginRequest){
+    public LoginResponse login(LoginRequest loginRequest) {
         Authentication auth = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(auth);
         User user = (User) auth.getPrincipal();
         return getLoginResponse(user.getUsername());
     }
 
-    public LoginResponse check(Principal principal){
-        if (principal==null){
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+    }
+
+    public LoginResponse check(Principal principal) {
+        if (principal == null) {
             return new LoginResponse();
         }
 
         return getLoginResponse(principal.getName());
     }
 
-    private LoginResponse getLoginResponse(String email){
-        main.model.User currentUser=
-                userRepository.findByEmail(email).orElseThrow(()->new UsernameNotFoundException(email));
+    private LoginResponse getLoginResponse(String email) {
+        main.model.User currentUser =
+                userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
         UserBody userBody = new UserBody();
         userBody.setEmail(currentUser.getEmail());
         userBody.setName(currentUser.getName());
-        userBody.setModeration(currentUser.getIsModerator()==1);
+        userBody.setModeration(currentUser.getIsModerator() == 1);
         userBody.setId(currentUser.getId());
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setResult(true);

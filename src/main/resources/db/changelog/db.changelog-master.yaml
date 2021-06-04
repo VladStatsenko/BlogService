@@ -267,7 +267,7 @@ databaseChangeLog:
                   value: "dddd@mail.ru"
               - column:
                   name: password
-                  value: "$2y$12$fjwA2ddp5HkcHxvohMZoWOMnutspY17HAGBCoOZ1q//BkCuy6F2d6 "
+                  value: "$2y$12$8kieDgFZXUSj81I7Td/HXOEjL42qEQOkNvE6L7yuDxP.YFLEmnwxW"
               - column:
                   name: code
                   value: "TITLE"
@@ -381,7 +381,7 @@ databaseChangeLog:
                   value: "ddd@mail.ru"
               - column:
                   name: password
-                  value: "$2y$12$fjwA2ddp5HkcHxvohMZoWOMnutspY17HAGBCoOZ1q//BkCuy6F2d6 "
+                  value: "$2y$12$8kieDgFZXUSj81I7Td/HXOEjL42qEQOkNvE6L7yuDxP.YFLEmnwxW"
               - column:
                   name: code
                   value: "TITLE"
@@ -477,6 +477,95 @@ databaseChangeLog:
               - column:
                   name: text
                   value: "wow"
+  - changeSet:
+      id: 3
+      author: vStastenko
+      comment: "add data db"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: is_moderator
+                  value: 0
+              - column:
+                  name: reg_time
+                  value: "2021-02-02 12:25:25"
+              - column:
+                  name: name
+                  value: "Victor"
+              - column:
+                  name: email
+                  value: "dd@mail.ru"
+              - column:
+                  name: password
+                  value: "$2y$12$8kieDgFZXUSj81I7Td/HXOEjL42qEQOkNvE6L7yuDxP.YFLEmnwxW"
+              - column:
+                  name: code
+                  value: "JAVA"
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: is_active
+                  value: 0
+              - column:
+                  name: moderation_status
+                  value: "NEW"
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 3
+              - column:
+                  name: time
+                  value: "2020-12-02 12:35:25"
+              - column:
+                  name: title
+                  value: "JAVA"
+              - column:
+                  name: 'text'
+                  value: "java web"
+              - column:
+                  name: view_count
+                  value: 51
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "NEW"
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 3
+              - column:
+                  name: time
+                  value: "2020-12-02 12:35:25"
+              - column:
+                  name: title
+                  value: "PYTHON"
+              - column:
+                  name: 'text'
+                  value: "PYTHON web"
+              - column:
+                  name: view_count
+                  value: 7
       rollback:
         - delete:
             tableName: users

@@ -53,6 +53,7 @@ public class UserService {
             user.setRegTime(LocalDateTime.now(ZoneId.systemDefault()));
             user.setPassword(passwordEncoder().encode(registerRequest.getPassword()));
             user.setIsModerator(0);
+            userRepository.save(user);
         } else {
             registerResponse.setErrors(errorBody);
         }

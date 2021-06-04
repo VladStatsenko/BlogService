@@ -5,6 +5,7 @@ import main.api.response.PostResponse;
 import main.api.response.body.CommentBody;
 import main.api.response.body.PostBody;
 import main.dao.PostDao;
+import main.model.Post;
 import main.model.Tag;
 import main.model.TagPost;
 import main.model.User;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -27,10 +29,12 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostDao postDao;
+    private final UserRepository userRepository;
 
     @Autowired
-    public PostService(PostDao postDao) {
+    public PostService(PostDao postDao, UserRepository userRepository) {
         this.postDao = postDao;
+        this.userRepository = userRepository;
     }
 
     public PostResponse getPosts(int offset, int limit, String mode) {
@@ -152,12 +156,63 @@ public class PostService {
                 .get()
                 .getComments().stream().map(CommentBody::new)
                 .collect(Collectors.toList());
+
         List<String> tags = postDao.findById(id).get()
                 .getTags().stream().map(TagPost::getTag).map(Tag::getName).collect(Collectors.toList());
 
         return new OnePostResponse(postBody.getId(), postBody.getTimestamp(), postBody.getUser()
                 , postBody.getTitle(), postBody.getAnnounce(), postBody.getLikeCount(), postBody.getDislikeCount(),
                 postBody.getCommentCount(), postBody.getViewCount(), comments, tags);
+    }
+
+    public PostResponse getMyPosts(int offset, int limit, String status, Principal principal) {
+        Pageable pageable;
+        PostResponse postResponse;
+
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new UsernameNotFoundException(principal.getName()));
+
+        switch (status) {
+            case ("inactive"):
+                pageable = PageRequest.of(offset, limit, Sort.by("time").descending());
+                postResponse = getInactivePosts(user.getId(), pageable);
+                break;
+            case ("pending"):
+                pageable = PageRequest.of(offset, limit, Sort.by("time").ascending());
+                postResponse = getActivePosts(Post.ModerationStatus.NEW.toString(), user.getId(), pageable);
+                break;
+            case ("declined"):
+                pageable = PageRequest.of(offset, limit);
+                postResponse = getActivePosts(Post.ModerationStatus.DECLINED.toString(), user.getId(), pageable);
+                break;
+            case ("published"):
+                pageable = PageRequest.of(offset, limit);
+                postResponse = getActivePosts(Post.ModerationStatus.ACCEPTED.toString(), user.getId(), pageable);
+                break;
+            default:
+                postResponse = new PostResponse();
+        }
+
+        return postResponse;
+    }
+
+    private PostResponse getActivePosts(String status, int id, Pageable pageable) {
+
+        List<PostBody> postDTOList = postDao
+                .findMyActivePosts(pageable, status, id)
+                .get()
+                .map(PostBody::new)
+                .collect(Collectors.toList());
+        return new PostResponse(postDTOList.size(), postDTOList);
+    }
+
+    private PostResponse getInactivePosts(int id, Pageable pageable) {
+
+        List<PostBody> postDTOList = postDao
+                .findMyInactivePosts(pageable, id)
+                .get()
+                .map(PostBody::new)
+                .collect(Collectors.toList());
+        return new PostResponse(postDTOList.size(), postDTOList);
     }
 
 }

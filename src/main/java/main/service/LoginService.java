@@ -1,6 +1,6 @@
 package main.service;
 
-import main.api.request.body.LoginRequest;
+import main.api.request.LoginRequest;
 import main.api.response.LoginResponse;
 import main.api.response.body.UserBody;
 import main.repository.UserRepository;
@@ -54,6 +54,10 @@ public class LoginService {
     }
 
     private LoginResponse getLoginResponse(String email) {
+
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setResult(true);
+
         main.model.User currentUser =
                 userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
         UserBody userBody = new UserBody();
@@ -61,9 +65,13 @@ public class LoginService {
         userBody.setName(currentUser.getName());
         userBody.setModeration(currentUser.getIsModerator() == 1);
         userBody.setId(currentUser.getId());
-        LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setResult(true);
+        userBody.setPhoto(currentUser.getPhoto());
+        userBody.setModerationCount(currentUser.getModeratorPosts().size());
+        userBody.setSettings(currentUser.getIsModerator() == 1);
+
         loginResponse.setUser(userBody);
+
         return loginResponse;
+
     }
 }

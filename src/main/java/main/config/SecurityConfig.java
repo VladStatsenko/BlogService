@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -40,11 +41,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin().disable()
                 .logout()
-                .logoutSuccessUrl("/").permitAll()
+                .logoutUrl("api/auth/logout")
+                .logoutSuccessUrl("/")
+                .deleteCookies("JSESSIONID")
+                .clearAuthentication(true)
                 .invalidateHttpSession(true)
-                .deleteCookies()
                 .and()
-                .httpBasic();
+                .httpBasic().disable();
     }
 
     @Bean

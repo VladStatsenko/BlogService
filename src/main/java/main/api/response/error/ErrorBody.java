@@ -1,4 +1,4 @@
-package main.api.response.body;
+package main.api.response.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,8 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorBody {
-    private String email;
-    private String name;
-    private String password;
-    private String captcha;
+    private String text;
 }

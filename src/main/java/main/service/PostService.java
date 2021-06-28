@@ -1,14 +1,21 @@
 package main.service;
 
+import main.api.request.PostRequest;
+import main.api.response.AddPostResponse;
 import main.api.response.OnePostResponse;
 import main.api.response.PostResponse;
+import main.api.response.StatisticResponse;
 import main.api.response.body.CommentBody;
 import main.api.response.body.PostBody;
+import main.api.response.error.ErrorsPostBody;
 import main.dao.PostDao;
 import main.model.Post;
 import main.model.Tag;
 import main.model.TagPost;
 import main.model.User;
+import main.repository.PostRepository;
+import main.repository.TagPostRepository;
+import main.repository.TagRepository;
 import main.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -30,16 +37,22 @@ public class PostService {
 
     private final PostDao postDao;
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
+    private final TagRepository tagRepository;
+    private final TagPostRepository tagPostRepository;
 
     @Autowired
-    public PostService(PostDao postDao, UserRepository userRepository) {
+    public PostService(PostDao postDao, UserRepository userRepository, PostRepository postRepository, TagRepository tagRepository, TagPostRepository tagPostRepository) {
         this.postDao = postDao;
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
+        this.tagRepository = tagRepository;
+        this.tagPostRepository = tagPostRepository;
     }
 
     public PostResponse getPosts(int offset, int limit, String mode) {
         Pageable pageable;
-        PostResponse postResponse = null;
+        PostResponse postResponse;
 
         switch (mode) {
             case ("recent"):
@@ -152,6 +165,10 @@ public class PostService {
                 .map(PostBody::new)
                 .get();
 
+        incrementCountView(id);
+
+        String text = postDao.findById(id).get().getText();
+
         List<CommentBody> comments = postDao.findById(id)
                 .get()
                 .getComments().stream().map(CommentBody::new)
@@ -162,7 +179,13 @@ public class PostService {
 
         return new OnePostResponse(postBody.getId(), postBody.getTimestamp(), postBody.getUser()
                 , postBody.getTitle(), postBody.getAnnounce(), postBody.getLikeCount(), postBody.getDislikeCount(),
-                postBody.getCommentCount(), postBody.getViewCount(), comments, tags);
+                postBody.getCommentCount(), postBody.getViewCount(), comments, tags, text);
+    }
+
+    private void incrementCountView(int id) {
+        Post post = postRepository.findById(id).orElse(null);
+        post.setViewCount(post.getViewCount() + 1);
+        postRepository.save(post);
     }
 
     public PostResponse getMyPosts(int offset, int limit, String status, Principal principal) {
@@ -213,6 +236,106 @@ public class PostService {
                 .map(PostBody::new)
                 .collect(Collectors.toList());
         return new PostResponse(postDTOList.size(), postDTOList);
+    }
+
+    public AddPostResponse addPost(PostRequest postRequest, Principal principal) {
+        AddPostResponse addPostResponse = new AddPostResponse();
+        addPostResponse.setResult(true);
+        ErrorsPostBody errors = new ErrorsPostBody();
+        if (postRequest.getTitle().isEmpty() || postRequest.getTitle().length() < 3) {
+            addPostResponse.setResult(false);
+            errors.setTitle("Заголовок не установлен, либо текст заголовка слишком короткий");
+        }
+        if (postRequest.getText().isEmpty() || postRequest.getText().length() < 50) {
+            addPostResponse.setResult(false);
+            errors.setText("Текст не установлен, либо текст слишком короткий");
+        }
+        if (addPostResponse.isResult()) {
+            User user = userRepository.findByEmail(principal.getName())
+                    .orElseThrow(() -> new UsernameNotFoundException("user not found"));
+            Post post = new Post();
+            post.setIsActive(1);
+            post.setTime(new Date());
+            post.setTitle(postRequest.getTitle());
+            post.setText(postRequest.getText());
+            post.setUser(user);
+            post.setStatus(Post.ModerationStatus.NEW);
+
+            postRepository.save(post);
+
+            for (String t : postRequest.getTags()
+            ) {
+                Tag tag = new Tag();
+                tag.setName(t);
+                TagPost tags2Post = new TagPost();
+                tags2Post.setPost(post);
+                tags2Post.setTag(tagRepository.save(tag));
+                tagPostRepository.save(tags2Post);
+
+            }
+        } else {
+            addPostResponse.setErrors(errors);
+        }
+        return addPostResponse;
+    }
+
+    public AddPostResponse editPost(PostRequest postRequest, int id, Principal principal) {
+        AddPostResponse addPostResponse = new AddPostResponse();
+        addPostResponse.setResult(true);
+        ErrorsPostBody errors = new ErrorsPostBody();
+        if (postRequest.getTitle().isEmpty() || postRequest.getTitle().length() < 3) {
+            addPostResponse.setResult(false);
+            errors.setTitle("Заголовок не установлен, либо текст заголовка слишком короткий");
+        }
+        if (postRequest.getText().isEmpty() || postRequest.getText().length() < 50) {
+            addPostResponse.setResult(false);
+            errors.setText("Текст не установлен, либо текст слишком короткий");
+        }
+        if (addPostResponse.isResult()) {
+
+            User user = userRepository.findByEmail(principal.getName())
+                    .orElseThrow(() -> new UsernameNotFoundException("user not found"));
+
+            Post post = postDao.findById(id).orElse(null);
+            post.setIsActive(1);
+            post.setTime(new Date());
+            post.setTitle(postRequest.getTitle());
+            post.setText(post.getText());
+            post.setUser(user);
+
+            List<String> oldTags = postDao.findById(id).get()
+                    .getTags().stream().map(TagPost::getTag).map(Tag::getName).collect(Collectors.toList());
+
+            for (String t : postRequest.getTags()
+            ) {
+                if (!oldTags.contains(t)) {
+                    Tag tag = new Tag();
+                    tag.setName(t);
+                    TagPost tags2Post = new TagPost();
+                    tags2Post.setPost(post);
+                    tags2Post.setTag(tagRepository.save(tag));
+                    tagPostRepository.save(tags2Post);
+                } else {
+                    oldTags.remove(t);
+                }
+
+            }
+        } else {
+            addPostResponse.setErrors(errors);
+        }
+        return addPostResponse;
+    }
+
+    public StatisticResponse getAllStatistic() {
+
+        List<Post> allPosts = (List<Post>) postRepository.findAll();
+        StatisticResponse statistic = new StatisticResponse();
+        statistic.setPostsCount(allPosts.size());
+        statistic.setLikesCount(allPosts.stream().mapToInt(post -> post.getLikes().size()).sum());
+        statistic.setDislikesCount(allPosts.stream().mapToInt(post -> post.getDislikes().size()).sum());
+        statistic.setViewsCount(allPosts.stream().mapToInt(Post::getViewCount).sum());
+        statistic.setFirstPublication(allPosts.get(0).getTime().getTime() / 1000);
+        return statistic;
     }
 
 }

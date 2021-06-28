@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import main.api.response.body.UserBody;
+import main.api.response.error.ErrorsProfile;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LoginResponse {
+public class EditProfileResponse {
     private boolean result;
-    private UserBody user;
+    private ErrorsProfile errors;
 }

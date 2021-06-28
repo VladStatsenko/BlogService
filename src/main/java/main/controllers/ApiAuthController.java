@@ -1,16 +1,18 @@
 package main.controllers;
 
-import main.api.request.body.LoginRequest;
-import main.api.request.body.RegisterRequest;
+import main.api.request.ChangePassRequest;
+import main.api.request.LoginRequest;
+import main.api.request.RegisterRequest;
+import main.api.request.RestoreRequest;
 import main.api.response.CaptchaResponse;
+import main.api.response.ChangePassResponse;
 import main.api.response.LoginResponse;
 import main.api.response.RegisterResponse;
+import main.repository.UserRepository;
 import main.service.CaptchaService;
 import main.service.LoginService;
 import main.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,17 +26,22 @@ public class ApiAuthController {
     private final CaptchaService captchaService;
     private final UserService userService;
     private final LoginService loginService;
+    private final UserRepository userRepository;
 
 
     @Autowired
-    public ApiAuthController(CaptchaService captchaService, UserService userService, LoginService loginService) {
+    public ApiAuthController(CaptchaService captchaService, UserService userService, LoginService loginService, UserRepository userRepository) {
         this.captchaService = captchaService;
         this.userService = userService;
         this.loginService = loginService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/auth/login")
-    public LoginResponse login(@RequestBody LoginRequest loginRequest) {
+    public LoginResponse login(@RequestBody LoginRequest loginRequest){
+        if (!userRepository.findByEmail(loginRequest.getEmail()).isPresent()){
+            return new LoginResponse();
+        }
         return loginService.login(loginRequest);
     }
 
@@ -51,15 +58,27 @@ public class ApiAuthController {
 
     @GetMapping("auth/logout")
     @PreAuthorize(value = "hasAuthority('user:write')")
-    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
+    public LoginResponse logout(HttpServletRequest request, HttpServletResponse response,Principal principal) {
         loginService.logout(request, response);
-        return new ResponseEntity(HttpStatus.OK);
+        return loginService.check(principal);
     }
 
     @PostMapping("/auth/register")
     public RegisterResponse register(@RequestBody RegisterRequest request) {
         return userService.registerUser(request);
     }
+
+    @PostMapping("/auth/restore")
+    public Boolean restore(@RequestBody RestoreRequest request,HttpServletRequest httpServletRequest) {
+        return userService.RestorePass(request,httpServletRequest);
+    }
+
+    @PostMapping("/auth/password")
+    public ChangePassResponse changePassword(@RequestBody ChangePassRequest request) {
+        return userService.changePassword(request);
+    }
+
+
 
 
 }

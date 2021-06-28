@@ -23,4 +23,7 @@ public class Tag implements Serializable {
     @OneToMany(mappedBy = "tag")
     private List<TagPost> posts = new ArrayList<>();
 
+    public Tag(String s) {
+        this.name = s;
+    }
 }

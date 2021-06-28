@@ -61,4 +61,14 @@ public interface PostRepository extends PagingAndSortingRepository<Post, Integer
             "AND p.time<current_timestamp", nativeQuery = true)
     Page<Post> findMyInactivePosts(Pageable pageable, @Param("id") int active);
 
+    @Query(value = "INSERT INTO posts (is_active, moderation_status, time, text, title, moderation_id, user_id, " +
+            "view_count)  VALUES ( :active , 'NEW', :time, :text, :title, :user_id, :user_id, 0)", nativeQuery = true)
+    Post addPost(@Param("active") int active, @Param("time") Date date, @Param("text") String text,
+                 @Param("title") String title, @Param("user_id") int userId);
+
+    @Query(value = "UPDATE posts p SET p.is_active=:active, p.moderation_status='NEW', p.time=:time, " +
+            "p.text=:text, p.title=:title WHERE p.id=:id", nativeQuery = true)
+    Post editPost(@Param("active") int active, @Param("time") Date date, @Param("text") String text,
+                  @Param("title") String title, @Param("id") int id);
+
 }

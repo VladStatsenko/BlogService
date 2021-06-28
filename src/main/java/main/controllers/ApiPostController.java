@@ -1,9 +1,15 @@
 package main.controllers;
 
+import main.api.request.LikeRequest;
+import main.api.request.ModeratePostRequest;
+import main.api.request.PostRequest;
+import main.api.response.AddPostResponse;
+import main.api.response.VoteResponse;
 import main.api.response.OnePostResponse;
 import main.api.response.PostResponse;
 import main.service.ModerationService;
 import main.service.PostService;
+import main.service.PostVoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,11 +22,13 @@ import java.security.Principal;
 public class ApiPostController {
     private final PostService postService;
     private final ModerationService moderationService;
+    private final PostVoteService postVoteService;
 
     @Autowired
-    public ApiPostController(PostService postService, ModerationService moderationService) {
+    public ApiPostController(PostService postService, ModerationService moderationService, PostVoteService postVoteService) {
         this.postService = postService;
         this.moderationService = moderationService;
+        this.postVoteService = postVoteService;
     }
 
 
@@ -53,7 +61,6 @@ public class ApiPostController {
     }
 
     @GetMapping("/post/{id}")
-    @PreAuthorize(value = "hasAuthority('user:write')")
     public ResponseEntity<OnePostResponse> findById(@PathVariable int id) {
         return ResponseEntity.ok(postService.getPostById(id));
     }
@@ -76,6 +83,35 @@ public class ApiPostController {
                                                     Principal principal) {
         return ResponseEntity.ok(postService.getMyPosts(offset, limit, status, principal));
 
+    }
+    @PostMapping("/post")
+    @PreAuthorize(value = "hasAuthority('user:write')")
+    public ResponseEntity<AddPostResponse> addPost(@RequestBody PostRequest postRequest, Principal principal){
+        return ResponseEntity.ok(postService.addPost(postRequest,principal));
+    }
+
+    @PutMapping("/post/{id}")
+    @PreAuthorize(value = "hasAuthority('user:write')")
+    public ResponseEntity<AddPostResponse> editPost(@RequestBody PostRequest postRequest,@PathVariable int id,Principal principal){
+        return ResponseEntity.ok(postService.editPost(postRequest,id,principal));
+    }
+
+    @PostMapping("/moderation")
+    @PreAuthorize(value = "hasAuthority('user:moderate')")
+    public ResponseEntity<Boolean> moderatePost(@RequestBody ModeratePostRequest moderatePostRequest, Principal principal){
+        return ResponseEntity.ok(moderationService.moderatePost(moderatePostRequest,principal));
+    }
+
+    @PostMapping("/post/like")
+    @PreAuthorize(value = "hasAuthority('user:write')")
+    public VoteResponse likePost(@RequestBody LikeRequest likeRequest, Principal principal){
+        return postVoteService.likePost(likeRequest,principal);
+    }
+
+    @PostMapping("/post/dislike")
+    @PreAuthorize(value = "hasAuthority('user:write')")
+    public VoteResponse dislikePost(@RequestBody LikeRequest likeRequest, Principal principal){
+        return postVoteService.dislikePost(likeRequest,principal);
     }
 
 

@@ -8,9 +8,18 @@ referenceUrl: hibernate:spring:ru.usharik.liquibase.demo.persist.model?dialect=o
 diffChangeLogFile: /src/main/resources/db/changelog/db.changelog-@timestamp@.yaml
 ignoreClasspathPrefix: true
 
+spring.mail.host: smtp.gmail.com
+spring.mail.port: 587
+spring.mail.username: vladStatsenko1@gmail.com
+spring.mail.password: rfhfcbrbQ1
+spring.mail.properties.mail.smtp.auth: true
+spring.mail.properties.mail.smtp.starttls.enable: true
+
 blog.title: DevPub
 blog.subtitle: Рассказы разработчиков
 blog.phone: +7 915 861-73-63
 blog.email: vladStatsenko1@gmail.com
 blog.copyright: Стаценко Владислав
 blog.copyrightFrom: 2021
+
+blog.maxFileSize: 5242880

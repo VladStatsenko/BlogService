@@ -4,13 +4,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import main.api.response.body.UserBody;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LoginResponse {
-    private boolean result;
-    private UserBody user;
+public class StatisticResponse {
+    private long postsCount;
+    private long likesCount;
+    private long dislikesCount;
+    private long viewsCount;
+    private long firstPublication;
+
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import main.api.response.body.ErrorBody;
+import main.api.response.error.ErrorsRegisterBody;
 
 @Data
 @AllArgsConstructor
@@ -12,5 +12,5 @@ import main.api.response.body.ErrorBody;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RegisterResponse {
     private boolean result;
-    private ErrorBody errors;
+    private ErrorsRegisterBody errors;
 }

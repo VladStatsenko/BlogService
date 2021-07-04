@@ -32,7 +32,7 @@ public class StorageService {
         this.userRepository = userRepository;
     }
 
-    public ResponseEntity<Object> uploadPhoto(MultipartFile photo) {
+    public ResponseEntity<Object> store(MultipartFile photo) {
 
         String folder = "upload";
 
@@ -51,7 +51,7 @@ public class StorageService {
         }
 
 
-        Path filePath = uploadDir.resolve(Objects.requireNonNull(photo.getOriginalFilename()));
+        Path filePath = uploadDir.resolve(photo.getOriginalFilename());
         try {
             Files.copy(photo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {

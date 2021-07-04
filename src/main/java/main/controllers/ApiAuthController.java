@@ -70,7 +70,7 @@ public class ApiAuthController {
 
     @PostMapping("/auth/restore")
     public Boolean restore(@RequestBody RestoreRequest request,HttpServletRequest httpServletRequest) {
-        return userService.RestorePass(request,httpServletRequest);
+        return userService.restorePass(request,httpServletRequest);
     }
 
     @PostMapping("/auth/password")

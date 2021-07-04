@@ -24,5 +24,4 @@ public class TagPost implements Serializable {
     @ManyToOne
     @JoinColumn(name = "tag_id")
     private Tag tag;
-
 }

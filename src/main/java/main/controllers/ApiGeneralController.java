@@ -67,7 +67,7 @@ public class ApiGeneralController {
     @PostMapping(value = "/image", consumes = "multipart/form-data")
     @PreAuthorize(value = "hasAuthority('user:write')")
     public ResponseEntity<Object> uploadPhoto(@RequestParam("image") MultipartFile photo) {
-        return storageService.uploadPhoto(photo);
+        return storageService.store(photo);
     }
 
     @PostMapping("/comment")

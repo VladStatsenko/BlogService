@@ -150,7 +150,7 @@ public class UserService {
         return statistic;
     }
 
-    public Boolean RestorePass(RestoreRequest request, HttpServletRequest servletRequest) {
+    public Boolean restorePass(RestoreRequest request, HttpServletRequest servletRequest) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
         if (user == null) {

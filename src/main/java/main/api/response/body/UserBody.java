@@ -22,5 +22,6 @@ public class UserBody {
     public UserBody(User user) {
         this.id = user.getId();
         this.name = user.getName();
+        this.photo = user.getPhoto();
     }
 }

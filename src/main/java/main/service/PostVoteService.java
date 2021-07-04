@@ -60,8 +60,8 @@ public class PostVoteService {
             return true;
         } else {
             if (postVoters.getValue() != value){
-                postVoters.setValue(value);
                 postVoters.setTime(new Date());
+                postVoters.setValue(value);
                 voteRepository.save(postVoters);
                 return true;
             }

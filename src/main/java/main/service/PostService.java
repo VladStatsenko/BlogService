@@ -254,24 +254,23 @@ public class PostService {
             User user = userRepository.findByEmail(principal.getName())
                     .orElseThrow(() -> new UsernameNotFoundException("user not found"));
             Post post = new Post();
-            post.setIsActive(1);
+            post.setIsActive(postRequest.getActive());
             post.setTime(new Date());
             post.setTitle(postRequest.getTitle());
             post.setText(postRequest.getText());
             post.setUser(user);
             post.setStatus(Post.ModerationStatus.NEW);
 
-            postRepository.save(post);
+            post = postRepository.save(post);
 
             for (String t : postRequest.getTags()
             ) {
-                Tag tag = new Tag();
+                Tag tag = tagRepository.findFirstByNameLike(t).orElse(new Tag());
                 tag.setName(t);
                 TagPost tags2Post = new TagPost();
                 tags2Post.setPost(post);
                 tags2Post.setTag(tagRepository.save(tag));
                 tagPostRepository.save(tags2Post);
-
             }
         } else {
             addPostResponse.setErrors(errors);
@@ -297,28 +296,22 @@ public class PostService {
                     .orElseThrow(() -> new UsernameNotFoundException("user not found"));
 
             Post post = postDao.findById(id).orElse(null);
-            post.setIsActive(1);
+            post.setIsActive(postRequest.getActive());
             post.setTime(new Date());
             post.setTitle(postRequest.getTitle());
             post.setText(post.getText());
             post.setUser(user);
-
-            List<String> oldTags = postDao.findById(id).get()
-                    .getTags().stream().map(TagPost::getTag).map(Tag::getName).collect(Collectors.toList());
+            post = postRepository.save(post);
 
             for (String t : postRequest.getTags()
             ) {
-                if (!oldTags.contains(t)) {
-                    Tag tag = new Tag();
-                    tag.setName(t);
-                    TagPost tags2Post = new TagPost();
-                    tags2Post.setPost(post);
-                    tags2Post.setTag(tagRepository.save(tag));
-                    tagPostRepository.save(tags2Post);
-                } else {
-                    oldTags.remove(t);
-                }
 
+                Tag tag = tagRepository.findFirstByNameLike(t).orElse(new Tag());
+                tag.setName(t);
+                TagPost tags2Post = new TagPost();
+                tags2Post.setPost(post);
+                tags2Post.setTag(tagRepository.save(tag));
+                tagPostRepository.save(tags2Post);
             }
         } else {
             addPostResponse.setErrors(errors);

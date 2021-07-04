@@ -29,7 +29,7 @@ public class CaptchaService {
         Captcha captcha = new Captcha();
         CaptchaResponse captchaResponse = new CaptchaResponse();
 
-        String codeOnImage = GenerateCaptcha(5);
+        String codeOnImage = generateCaptcha(5);
         String secretCode = cage.getTokenGenerator().next();
         String base64Image = Base64.getEncoder().encodeToString(cage.draw(codeOnImage));
 
@@ -49,7 +49,7 @@ public class CaptchaService {
         captchaRepository.dropCaptcha(1);
     }
 
-    private String GenerateCaptcha(int captchaLength) {
+    private String generateCaptcha(int captchaLength) {
 
         String captcha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 

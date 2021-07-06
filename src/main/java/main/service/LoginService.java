@@ -30,6 +30,12 @@ public class LoginService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Метод проверяет введенные данные и производит авторизацию пользователя, если введенные данные
+     * верны.
+     * @param loginRequest
+     * @return
+     */
     public LoginResponse login(LoginRequest loginRequest) {
         Authentication auth = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
@@ -38,6 +44,12 @@ public class LoginService {
         return getLoginResponse(user.getUsername());
     }
 
+    /**
+     * Метод разлогинивает пользователя: удаляет идентификатор его сессии из списка авторизованных.
+     * Всегда возвращает true, даже если идентификатор текущей сессии не найден в списке авторизованных.
+     * @param request
+     * @param response
+     */
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
@@ -45,6 +57,12 @@ public class LoginService {
         }
     }
 
+    /**
+     * Метод возвращает информацию о текущем авторизованном пользователе, если он авторизован. Он
+     * должен проверять, сохранён ли идентификатор текущей сессии в списке авторизованных.
+     * @param principal
+     * @return
+     */
     public LoginResponse check(Principal principal) {
         if (principal == null) {
             return new LoginResponse();

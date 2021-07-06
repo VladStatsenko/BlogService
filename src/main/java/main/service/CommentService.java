@@ -34,6 +34,12 @@ public class CommentService {
         this.postRepository = postRepository;
     }
 
+    /**
+     * Метод добавляет комментарий к посту.
+     * @param commentRequest
+     * @param principal
+     * @return
+     */
     public ResponseEntity<Object> postComment(CommentRequest commentRequest, Principal principal) {
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));

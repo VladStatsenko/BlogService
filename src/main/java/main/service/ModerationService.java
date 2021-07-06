@@ -33,6 +33,16 @@ public class ModerationService {
         this.postRepository = postRepository;
     }
 
+    /**
+     * Метод выводит все посты, которые требуют модерационных действий (которые нужно утвердить или
+     * отклонить) или над которыми мною были совершены модерационные действия: которые я отклонил
+     * или утвердил.
+     * @param offset
+     * @param limit
+     * @param status
+     * @param principal
+     * @return
+     */
     public PostResponse getPostsModeration(int offset, int limit, String status, Principal principal) {
         Pageable pageable;
         PostResponse postResponse = null;
@@ -70,6 +80,12 @@ public class ModerationService {
         return new PostResponse(postDTOList.size(), postDTOList);
     }
 
+    /**
+     * Метод фиксирует действие модератора по посту: его утверждение или отклонение.
+     * @param moderatePostRequest
+     * @param principal
+     * @return
+     */
     public boolean moderatePost(ModeratePostRequest moderatePostRequest, Principal principal) {
         User moderator = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));

@@ -50,6 +50,15 @@ public class PostService {
         this.tagPostRepository = tagPostRepository;
     }
 
+    /**
+     * Метод получения постов со всей сопутствующей информацией для главной страницы и подразделов
+     * "Новые", "Самые обсуждаемые", "Лучшие" и "Старые". Метод выводит посты, отсортированные в
+     * соответствии с параметром mode
+     * @param offset
+     * @param limit
+     * @param mode
+     * @return
+     */
     public PostResponse getPosts(int offset, int limit, String mode) {
         Pageable pageable;
         PostResponse postResponse;
@@ -104,6 +113,14 @@ public class PostService {
         return new PostResponse(postDTOList.size(), postDTOList);
     }
 
+    /**
+     * Метод возвращает посты, соответствующие поисковому запросу - строке query. В случае, если запрос
+     * пустой или содержит только пробелы, метод должен выводить все посты.
+     * @param offset
+     * @param limit
+     * @param searchQuery
+     * @return
+     */
     public PostResponse getPostsBySearch(int offset, int limit, String searchQuery) {
         List<PostBody> postDTOList;
         Pageable pageable = PageRequest.of(offset, limit);
@@ -122,6 +139,13 @@ public class PostService {
         return new PostResponse(postDTOList.size(), postDTOList);
     }
 
+    /**
+     * Выводит посты за указанную дату, переданную в запросе в параметре date.
+     * @param offset
+     * @param limit
+     * @param sDate
+     * @return
+     */
     public PostResponse getPostsByDate(int offset, int limit, String sDate) {
         Pageable pageable = PageRequest.of(offset, limit);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -149,6 +173,14 @@ public class PostService {
         return new PostResponse(postDTOList.size(), postDTOList);
     }
 
+    /**
+     * Метод выводит список постов, привязанных к тэгу, который был передан методу в качестве параметра
+     * tag.
+     * @param offset
+     * @param limit
+     * @param tag
+     * @return
+     */
     public PostResponse getPostsByTag(int offset, int limit, String tag) {
         Pageable pageable = PageRequest.of(offset, limit);
         List<PostBody> postDTOList = postDao
@@ -159,6 +191,12 @@ public class PostService {
         return new PostResponse(postDTOList.size(), postDTOList);
     }
 
+    /**
+     * Метод выводит данные конкретного поста для отображения на странице поста, в том числе, список
+     * комментариев и тэгов, привязанных к данному посту.
+     * @param id
+     * @return
+     */
     public OnePostResponse getPostById(int id) {
 
         PostBody postBody = postDao.findById(id)
@@ -188,6 +226,14 @@ public class PostService {
         postRepository.save(post);
     }
 
+    /**
+     * Метод выводит только те посты, которые создал пользователь.
+     * @param offset
+     * @param limit
+     * @param status
+     * @param principal
+     * @return
+     */
     public PostResponse getMyPosts(int offset, int limit, String status, Principal principal) {
         Pageable pageable;
         PostResponse postResponse;
@@ -238,6 +284,14 @@ public class PostService {
         return new PostResponse(postDTOList.size(), postDTOList);
     }
 
+    /**
+     * Метод отправляет данные поста, которые пользователь ввёл в форму публикации. В случае, если
+     * заголовок или текст поста не установлены и/или слишком короткие (короче 3 и 50 символов
+     * соответственно), метод должен выводить ошибку и не добавлять пост.
+     * @param postRequest
+     * @param principal
+     * @return
+     */
     public AddPostResponse addPost(PostRequest postRequest, Principal principal) {
         AddPostResponse addPostResponse = new AddPostResponse();
         addPostResponse.setResult(true);
@@ -278,6 +332,15 @@ public class PostService {
         return addPostResponse;
     }
 
+    /**
+     * Метод изменяет данные поста с идентификатором ID на те, которые пользователь ввёл в форму
+     * публикации. В случае, если заголовок или текст поста не установлены и/или слишком короткие (короче
+     * 3 и 50 символов соответственно), метод должен выводить ошибку и не изменять пост.
+     * @param postRequest
+     * @param id
+     * @param principal
+     * @return
+     */
     public AddPostResponse editPost(PostRequest postRequest, int id, Principal principal) {
         AddPostResponse addPostResponse = new AddPostResponse();
         addPostResponse.setResult(true);
@@ -319,6 +382,10 @@ public class PostService {
         return addPostResponse;
     }
 
+    /**
+     * Метод выдаёт статистику по всем постам блога.
+     * @return
+     */
     public StatisticResponse getAllStatistic() {
 
         List<Post> allPosts = (List<Post>) postRepository.findAll();

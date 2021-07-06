@@ -22,6 +22,10 @@ public class SettingsService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Метод возвращает глобальные настройки блога из таблицы global_settings.
+     * @return
+     */
     public SettingsResponse getGlobalSettings(){
         SettingsResponse settingsResponse = new SettingsResponse();
         settingsResponse.setMultiuserMode(true);
@@ -29,6 +33,13 @@ public class SettingsService {
         return settingsResponse;
     }
 
+    /**
+     * Метод записывает глобальные настройки блога в таблицу global_settings, если запрашивающий
+     * пользователь авторизован и является модератором.
+     * @param settingsRequest
+     * @param principal
+     * @return
+     */
     public SettingsResponse putSettings(SettingsRequest settingsRequest, Principal principal){
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));

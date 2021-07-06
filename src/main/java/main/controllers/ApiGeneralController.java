@@ -83,6 +83,13 @@ public class ApiGeneralController {
         return userService.editProfile(photo,editProfileRequest, principal);
     }
 
+    @PostMapping(value = "/profile/my")
+    @PreAuthorize(value = "hasAuthority('user:write')")
+    public EditProfileResponse editProfileWithoutPhoto(@RequestBody EditProfileRequest editProfileRequest
+            , Principal principal) {
+        return userService.editProfileWithoutPhoto(editProfileRequest, principal);
+    }
+
     @GetMapping("/statistics/my")
     @PreAuthorize(value = "hasAuthority('user:write')")
     public StatisticResponse getStatistic (Principal principal) {

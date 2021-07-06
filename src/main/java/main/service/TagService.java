@@ -25,6 +25,10 @@ public class TagService {
         this.tagRepository = tagRepository;
     }
 
+    /**
+     * Метод выдаёт список тэгов, начинающихся на строку, заданную в параметре query.
+     * @return
+     */
     public TagResponse getTags() {
         List<TagsBody> TagList = new ArrayList<>();
         tagDao.findAll().forEach(tag -> TagList.add(new TagsBody(tag.getName(), getWeight(tag.getName()))));

@@ -19,6 +19,13 @@ public class GeneralService {
         this.postDao = postDao;
     }
 
+    /**
+     * Метод выводит количества публикаций на каждую дату переданного в параметре year года или
+     * текущего года, если параметр year не задан. В параметре years всегда возвращается список всех годов,
+     * за которые была хотя бы одна публикация, в порядке возрастания.
+     * @param year
+     * @return
+     */
     public CalendarResponse getPostsByYear(Integer year) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, Calendar.JANUARY, 1, 0, 0, 1);

@@ -31,10 +31,24 @@ public class PostVoteService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Метод сохраняет в таблицу post_votes лайк текущего авторизованного пользователя. В случае
+     * повторного лайка возвращает {result: false}.
+     * @param likeRequest
+     * @param principal
+     * @return
+     */
     public VoteResponse likePost(LikeRequest likeRequest, Principal principal) {
         return new VoteResponse(votePost(likeRequest, principal, LIKE_VALUE));
     }
 
+    /**
+     * Метод сохраняет в таблицу post_votes дизлайк текущего авторизованного пользователя. В случае
+     * повторного дизлайка возвращает {result: false}.
+     * @param likeRequest
+     * @param principal
+     * @return
+     */
     public VoteResponse dislikePost(LikeRequest likeRequest, Principal principal) {
         return new VoteResponse(votePost(likeRequest, principal, DISLIKE_VALUE));
     }

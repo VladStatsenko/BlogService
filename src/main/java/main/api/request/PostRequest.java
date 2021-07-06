@@ -10,7 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostRequest {
-
     private long timestamp;
     private int active;
     private String title;

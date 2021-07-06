@@ -24,6 +24,10 @@ public class CaptchaService {
         this.captchaRepository = captchaRepository;
     }
 
+    /**
+     * Метод генерирует коды капчи, - отображаемый и секретный, - сохраняет их в базу данных
+     * @return
+     */
     public CaptchaResponse getCaptcha() {
         Cage cage = new GCage();
         Captcha captcha = new Captcha();

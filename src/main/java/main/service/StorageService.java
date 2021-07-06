@@ -32,6 +32,11 @@ public class StorageService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Метод загружает на сервер изображение в папку upload и три случайные подпапки.
+     * @param photo
+     * @return
+     */
     public ResponseEntity<Object> store(MultipartFile photo) {
 
         String folder = "upload";

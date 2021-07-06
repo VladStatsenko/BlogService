@@ -49,6 +49,12 @@ public class UserService {
         this.storageService = storageService;
     }
 
+    /**
+     * Метод создаёт пользователя в базе данных, если введённые данные верны. Если данные неверные -
+     * пользователь не создаётся, а метод возвращает соответствующую ошибку.
+     * @param registerRequest
+     * @return
+     */
     public RegisterResponse registerUser(RegisterRequest registerRequest) {
         RegisterResponse registerResponse = new RegisterResponse();
         registerResponse.setResult(true);
@@ -84,6 +90,14 @@ public class UserService {
         return registerResponse;
     }
 
+    /**
+     * Метод обрабатывает информацию, введённую пользователем в форму редактирования своего
+     * профиля.
+     * @param photo
+     * @param editProfileRequest
+     * @param principal
+     * @return
+     */
     @SneakyThrows
     public EditProfileResponse editProfile(MultipartFile photo, EditProfileRequest editProfileRequest, Principal principal) {
         User user = userRepository.findByEmail(principal.getName())
@@ -129,7 +143,7 @@ public class UserService {
                 user.setPhoto(storageService.uploadPhoto(photo, principal));
             }
             if (editProfileRequest.getRemovePhoto() == 1) {
-                user.setPhoto("");
+                user.setPhoto(null);
             }
             userRepository.save(user);
         } else {
@@ -138,6 +152,56 @@ public class UserService {
         return edit;
     }
 
+    public EditProfileResponse editProfileWithoutPhoto(EditProfileRequest editProfileRequest, Principal principal) {
+        User user = userRepository.findByEmail(principal.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("user not found"));
+        EditProfileResponse edit = new EditProfileResponse();
+        edit.setResult(true);
+        ErrorsProfile error = new ErrorsProfile();
+        if (editProfileRequest.getEmail() != null) {
+            if (editProfileRequest.getEmail().equals(userRepository.findByEmail(editProfileRequest.getEmail()))) {
+                edit.setResult(false);
+                error.setEmail("Этот e-mail уже зарегистрирован");
+            }
+        }
+        if (editProfileRequest.getName() != null) {
+            if (!(checkValidName(editProfileRequest.getName()))) {
+                edit.setResult(false);
+                error.setName("Имя введено неверно");
+            }
+        }
+        if (editProfileRequest.getPassword() != null) {
+            if (!(checkValidPassword(editProfileRequest.getPassword()))) {
+                edit.setResult(false);
+                error.setPassword("Пароль короче 6-ти символов");
+            }
+        }
+        if (edit.isResult()) {
+            if (editProfileRequest.getName() != null) {
+                user.setName(editProfileRequest.getName());
+            }
+            if (editProfileRequest.getEmail() != null) {
+                user.setEmail(editProfileRequest.getEmail());
+            }
+            if (editProfileRequest.getPassword() != null) {
+                user.setPassword(new BCryptPasswordEncoder(12).encode(editProfileRequest.getPassword()));
+            }
+            if (editProfileRequest.getRemovePhoto() == 1) {
+                user.setPhoto(null);
+            }
+            userRepository.save(user);
+        } else {
+            edit.setErrors(error);
+        }
+        return edit;
+    }
+
+    /**
+     * Метод возвращает статистику постов текущего авторизованного пользователя: общие количества
+     * параметров для всех публикаций, у который он является автором и доступные для чтения.
+     * @param principal
+     * @return
+     */
     public StatisticResponse getStatistic(Principal principal) {
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
@@ -150,6 +214,13 @@ public class UserService {
         return statistic;
     }
 
+    /**
+     * Метод проверяет наличие в базе пользователя с указанным e-mail. Если пользователь найден, ему
+     * должно отправляться письмо со ссылкой на восстановление пароля
+     * @param request
+     * @param servletRequest
+     * @return
+     */
     public Boolean restorePass(RestoreRequest request, HttpServletRequest servletRequest) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
@@ -173,6 +244,12 @@ public class UserService {
 
     }
 
+    /**
+     * Метод проверяет корректность кода восстановления пароля (параметр code) и корректность кодов
+     * капчи: введённый код (параметр captcha) должен совпадать со значением в поле code.
+     * @param request
+     * @return
+     */
     public ChangePassResponse changePassword(ChangePassRequest request) {
         ChangePassResponse response = new ChangePassResponse();
         ErrorsPassword error = new ErrorsPassword();

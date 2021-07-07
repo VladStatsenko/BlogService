@@ -1,8 +1,9 @@
-spring.datasource.url: jdbc:mysql://localhost:3306/blog?useJvmCharsetConverters=true
+spring.datasource.url: jdbc:${JAWSDB_URL:mysql://localhost:3306/blog?useJvmCharsetConverters=true}
 spring.datasource.username: vlad
 spring.datasource.password: testtest
 spring.jpa.hibernate.dll-auto: none
 spring.jpa.show-sql: true
+server.port: ${PORT:8080}
 changeLogFile: /src/main/resources/db/changelog/db.changelog-master.yaml
 referenceUrl: hibernate:spring:ru.usharik.liquibase.demo.persist.model?dialect=org.hibernate.dialect.MySQLDialect
 diffChangeLogFile: /src/main/resources/db/changelog/db.changelog-@timestamp@.yaml

@@ -59,7 +59,7 @@ public interface PostRepository extends PagingAndSortingRepository<Post, Integer
 
     @Query(value = "SELECT COUNT(*) FROM posts p JOIN users u ON u.id = p.user_id WHERE u.email = :email " +
             "AND p.is_active = 1 AND p.status = 'NEW'", nativeQuery = true)
-    List<Post> findPostIsModerate(String email);
+    List<Post> findPostIsModerate(@Param("email") String email);
 
     @Query(value = "SELECT * FROM posts p JOIN users u ON u.id = p.user_id WHERE u.id = :id AND p.is_active = 1 " +
             "AND p.moderation_status = :status AND p.time<current_timestamp", nativeQuery = true)

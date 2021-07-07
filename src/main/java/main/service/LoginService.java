@@ -3,6 +3,7 @@ package main.service;
 import main.api.request.LoginRequest;
 import main.api.response.LoginResponse;
 import main.api.response.body.UserBody;
+import main.repository.PostRepository;
 import main.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,11 +24,13 @@ public class LoginService {
 
     private final AuthenticationManager authenticationManager;//
     private final UserRepository userRepository;//
+    private final PostRepository postRepository;
 
     @Autowired
-    public LoginService(AuthenticationManager authenticationManager, UserRepository userRepository) {
+    public LoginService(AuthenticationManager authenticationManager, UserRepository userRepository, PostRepository postRepository) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
     }
 
     /**
@@ -84,7 +87,7 @@ public class LoginService {
         userBody.setModeration(currentUser.getIsModerator() == 1);
         userBody.setId(currentUser.getId());
         userBody.setPhoto(currentUser.getPhoto());
-        userBody.setModerationCount(currentUser.getModeratorPosts().size());
+        userBody.setModerationCount(postRepository.findPostIsModerate(currentUser.getEmail()).size());
         userBody.setSettings(currentUser.getIsModerator() == 1);
 
         loginResponse.setUser(userBody);

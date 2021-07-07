@@ -38,7 +38,7 @@ public class TagService {
 
     private double getWeight(String name) {
         double count = postRepository.count();
-        double tagCount = tagRepository.findByName(name).size();
+        double tagCount = postRepository.findByTag(name).size();
         double dWeight = tagCount/count;
 
         double k = 1.1;

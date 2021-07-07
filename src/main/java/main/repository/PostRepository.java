@@ -45,6 +45,10 @@ public interface PostRepository extends PagingAndSortingRepository<Post, Integer
             "AND p.isActive = 1 AND p.status = 'ACCEPTED' AND p.time<current_timestamp")
     Page<Post> findByTag(Pageable pageable, @Param("tag") String tag);
 
+    @Query(value = "SELECT p FROM Post p JOIN p.tags t JOIN t.tag k WHERE k.name= :tag " +
+            "AND p.isActive = 1 AND p.status = 'ACCEPTED' AND p.time<current_timestamp")
+    List<Post> findByTag(@Param("tag") String tag);
+
     @Query(value = "SELECT p FROM Post p WHERE p.time<current_timestamp " +
             "AND p.id = :id")
     Optional<Post> findById(@Param("id") int id);

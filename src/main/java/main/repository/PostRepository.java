@@ -58,7 +58,7 @@ public interface PostRepository extends PagingAndSortingRepository<Post, Integer
     Page<Post> findPostModeration(@Param("status") String status, Pageable pageable);
 
     @Query(value = "SELECT COUNT(*) FROM posts p JOIN users u ON u.id = p.user_id WHERE u.email = :email " +
-            "AND p.is_active = 1 AND p.status = 'NEW'", nativeQuery = true)
+            "AND p.is_active = 1 AND p.moderation_status = 'NEW'", nativeQuery = true)
     List<Post> findPostIsModerate(@Param("email") String email);
 
     @Query(value = "SELECT * FROM posts p JOIN users u ON u.id = p.user_id WHERE u.id = :id AND p.is_active = 1 " +

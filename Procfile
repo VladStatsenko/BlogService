@@ -1,0 +1,1 @@
+web: java -jar target/BlogService-1.0.jar

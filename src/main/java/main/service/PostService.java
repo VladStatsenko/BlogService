@@ -73,8 +73,8 @@ public class PostService {
                 postResponse = getPostsSortedByTime(pageable);
                 break;
             case ("best"):
-                pageable = PageRequest.of(offset, limit, Sort.by("likes").ascending());
-                postResponse = getPostsSortedByTime(pageable);
+                pageable = PageRequest.of(offset, limit);
+                postResponse = getPostsSortedByLikes(pageable);
                 break;
             case ("popular"):
                 pageable = PageRequest.of(offset, limit);

@@ -22,7 +22,7 @@ public interface PostRepository extends PagingAndSortingRepository<Post, Integer
             "GROUP BY p ORDER BY COUNT (v) DESC")
     Page<Post> findByLikes(Pageable pageable);
 
-    @Query(value = "SELECT distinct p FROM PostComment c JOIN c.post p " +
+    @Query(value = "SELECT p FROM PostComment c JOIN c.post p " +
             "ORDER BY COUNT (c) DESC")
     Page<Post> findByComments(Pageable pageable);
 

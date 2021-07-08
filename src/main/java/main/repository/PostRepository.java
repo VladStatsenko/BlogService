@@ -18,11 +18,11 @@ public interface PostRepository extends PagingAndSortingRepository<Post, Integer
     @Query(value = "SELECT p FROM Post p WHERE p.isActive = 1 AND p.status = 'ACCEPTED' AND p.time<current_timestamp")
     Page<Post> findAllPosts(Pageable pageable);
 
-    @Query(value = "SELECT distinct p FROM PostVoters v JOIN v.post p " +
+    @Query(value = "SELECT p FROM PostVoters v JOIN v.post p " +
             "GROUP BY p ORDER BY COUNT (v) DESC")
     Page<Post> findByLikes(Pageable pageable);
 
-    @Query(value = "SELECT distinct p FROM PostComment c JOIN c.post p " +
+    @Query(value = "SELECT p FROM PostComment c JOIN c.post p " +
             "GROUP BY p ORDER BY COUNT (c) DESC")
     Page<Post> findByComments(Pageable pageable);
 

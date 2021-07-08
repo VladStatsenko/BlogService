@@ -25,7 +25,7 @@ public class PostBody {
         this.user = new UserBody(post.getUser());
         this.title = post.getTitle();
         this.announce = post.getText().length() < 150 ? post.getText() : post.getText()
-                .replaceAll("<!--(.*?)-->","").substring(0, 150).concat("...");
+                .substring(0, 150).concat("...").replaceAll("<!--(.*?)-->","");
         this.likeCount = post.getLikes().size();
         this.dislikeCount = post.getDislikes().size();
         this.commentCount = post.getComments().size();

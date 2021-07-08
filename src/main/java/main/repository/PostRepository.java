@@ -22,8 +22,8 @@ public interface PostRepository extends PagingAndSortingRepository<Post, Integer
             "GROUP BY p ORDER BY COUNT (v) DESC")
     Page<Post> findByLikes(Pageable pageable);
 
-    @Query(value = "SELECT * FROM post p WHERE p.is_active = 1 AND p.moderation_status = 'ACCEPTED' " +
-            "AND p.`time` < NOW() ORDER BY (SELECT count(*) FROM post_comments c WHERE c.post_id = p.id) DESC",nativeQuery = true)
+    @Query(value = "SELECT distinct p FROM PostComment c JOIN c.post p " +
+            "ORDER BY COUNT (c) DESC")
     Page<Post> findByComments(Pageable pageable);
 
     @Query(value = "SELECT p FROM Post p WHERE p.isActive = 1 AND p.status = 'ACCEPTED' " +

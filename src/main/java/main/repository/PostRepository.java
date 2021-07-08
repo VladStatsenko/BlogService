@@ -18,8 +18,8 @@ public interface PostRepository extends PagingAndSortingRepository<Post, Integer
     @Query(value = "SELECT p FROM Post p WHERE p.isActive = 1 AND p.status = 'ACCEPTED' AND p.time<current_timestamp")
     Page<Post> findAllPosts(Pageable pageable);
 
-    @Query(value = "SELECT p FROM PostVoters v JOIN v.post p " +
-            "GROUP BY p ORDER BY COUNT (v) DESC")
+    @Query(value = "SELECT * FROM posts p WHERE p.is_active = 1 AND p.moderation_status = 'ACCEPTED' " +
+            "AND p.time < NOW() ORDER BY (SELECT sum(value) FROM post_votes c WHERE c.post_id = p.id) DESC", nativeQuery = true)
     Page<Post> findByLikes(Pageable pageable);
 
     @Query(value = "SELECT * FROM posts p WHERE p.is_active = 1 AND p.moderation_status = 'ACCEPTED' " +

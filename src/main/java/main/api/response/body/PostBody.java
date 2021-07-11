@@ -25,7 +25,7 @@ public class PostBody {
         this.timestamp = (post.getTime().getTime() / 1000);
         this.user = new UserBody(post.getUser());
         this.title = post.getTitle();
-        this.announce = post.getText().length() < 150 ? htmlTags(post.getText()) : htmlTags(post.getText())
+        this.announce = htmlTags(post.getText()).length() < 150 ? htmlTags(post.getText()) : htmlTags(post.getText())
                 .substring(0, 150).concat("...");
         this.likeCount = post.getLikes().size();
         this.dislikeCount = post.getDislikes().size();

@@ -4,16 +4,15 @@ import main.api.request.ChangePassRequest;
 import main.api.request.LoginRequest;
 import main.api.request.RegisterRequest;
 import main.api.request.RestoreRequest;
-import main.api.response.CaptchaResponse;
-import main.api.response.ChangePassResponse;
-import main.api.response.LoginResponse;
-import main.api.response.RegisterResponse;
+import main.api.response.*;
+import main.model.User;
 import main.repository.UserRepository;
 import main.service.CaptchaService;
 import main.service.LoginService;
 import main.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +38,12 @@ public class ApiAuthController {
 
     @PostMapping("/auth/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest){
-        if (!userRepository.findByEmail(loginRequest.getEmail()).isPresent()){
+        User user = userRepository.findByEmail(loginRequest.getEmail()).orElse(null);
+        BCryptPasswordEncoder b = new BCryptPasswordEncoder();
+        if (user==null){
+            return new LoginResponse();
+        }
+        if (!b.matches(loginRequest.getPassword(), user.getPassword())){
             return new LoginResponse();
         }
         return loginService.login(loginRequest);
@@ -69,7 +73,7 @@ public class ApiAuthController {
     }
 
     @PostMapping("/auth/restore")
-    public Boolean restore(@RequestBody RestoreRequest request,HttpServletRequest httpServletRequest) {
+    public RestoreResponse restore(@RequestBody RestoreRequest request, HttpServletRequest httpServletRequest) {
         return userService.restorePass(request,httpServletRequest);
     }
 

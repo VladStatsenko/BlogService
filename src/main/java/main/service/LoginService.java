@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,10 +37,11 @@ public class LoginService {
     /**
      * Метод проверяет введенные данные и производит авторизацию пользователя, если введенные данные
      * верны.
+     *
      * @param loginRequest
      * @return
      */
-    public LoginResponse login(LoginRequest loginRequest) {
+    public LoginResponse login(LoginRequest loginRequest) throws AuthenticationException {
         Authentication auth = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(auth);
@@ -50,6 +52,7 @@ public class LoginService {
     /**
      * Метод разлогинивает пользователя: удаляет идентификатор его сессии из списка авторизованных.
      * Всегда возвращает true, даже если идентификатор текущей сессии не найден в списке авторизованных.
+     *
      * @param request
      * @param response
      */
@@ -63,6 +66,7 @@ public class LoginService {
     /**
      * Метод возвращает информацию о текущем авторизованном пользователе, если он авторизован. Он
      * должен проверять, сохранён ли идентификатор текущей сессии в списке авторизованных.
+     *
      * @param principal
      * @return
      */
@@ -89,9 +93,7 @@ public class LoginService {
         userBody.setPhoto(currentUser.getPhoto());
         userBody.setModerationCount(postRepository.findPostIsModerate(email));
         userBody.setSettings(currentUser.getIsModerator() == 1);
-
         loginResponse.setUser(userBody);
-
         return loginResponse;
 
     }

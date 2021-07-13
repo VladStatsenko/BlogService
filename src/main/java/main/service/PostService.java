@@ -217,7 +217,7 @@ public class PostService {
 
         return new OnePostResponse(postBody.getId(), postBody.getTimestamp(), postBody.getUser()
                 , postBody.getTitle(), postBody.getAnnounce(), postBody.getLikeCount(), postBody.getDislikeCount(),
-                postBody.getCommentCount(), postBody.getViewCount(), comments, tags, text);
+                postBody.getCommentCount(), postBody.getViewCount()+1, comments, tags, text);
     }
 
     private void incrementCountView(int id) {

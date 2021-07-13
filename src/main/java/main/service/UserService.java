@@ -5,10 +5,7 @@ import main.api.request.ChangePassRequest;
 import main.api.request.EditProfileRequest;
 import main.api.request.RegisterRequest;
 import main.api.request.RestoreRequest;
-import main.api.response.ChangePassResponse;
-import main.api.response.EditProfileResponse;
-import main.api.response.RegisterResponse;
-import main.api.response.StatisticResponse;
+import main.api.response.*;
 import main.api.response.error.ErrorsPassword;
 import main.api.response.error.ErrorsProfile;
 import main.api.response.error.ErrorsRegisterBody;
@@ -221,26 +218,30 @@ public class UserService {
      * @param servletRequest
      * @return
      */
-    public Boolean restorePass(RestoreRequest request, HttpServletRequest servletRequest) {
+    public RestoreResponse restorePass(RestoreRequest request, HttpServletRequest servletRequest) {
+        RestoreResponse response = new RestoreResponse();
+        response.setResult(true);
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
         if (user == null) {
-            return false;
+            response.setResult(false);
         }
-        String code = UUID.randomUUID().toString();
-        user.setCode(code);
-        userRepository.save(user);
+        if (response.isResult()) {
+            String code = UUID.randomUUID().toString();
+            user.setCode(code);
+            userRepository.save(user);
 
-        StringBuilder message = new StringBuilder();
-        message.append("Добрый день, \n")
-                .append("Ссылка для восстановления пароля: \n")
-                .append("http://")
-                .append(servletRequest.getHeader("HOST"))
-                .append("/login/change-password/")
-                .append(code);
+            StringBuilder message = new StringBuilder();
+            message.append("Добрый день, \n")
+                    .append("Ссылка для восстановления пароля: \n")
+                    .append("http://")
+                    .append(servletRequest.getHeader("HOST"))
+                    .append("/login/change-password/")
+                    .append(code);
 
-        emailService.sendSimpleEmail("vladStatsenko1@gmail.com", user.getEmail(), "Password restore", message.toString());
-        return true;
+            emailService.sendSimpleEmail("vladStatsenko1@gmail.com", user.getEmail(), "Password restore", message.toString());
+        }
+        return response;
 
     }
 

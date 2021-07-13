@@ -41,7 +41,7 @@ public class TagService {
         double tagCount = postRepository.findByTag(name).size();
         double dWeight = tagCount/count;
 
-        double k = 1.1;
+        double k = 1.4;
         double Weight = k * dWeight;
 
         return Weight;

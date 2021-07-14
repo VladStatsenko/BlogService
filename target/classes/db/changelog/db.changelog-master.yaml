@@ -1,0 +1,581 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-lesson1.yaml
+  - changeSet:
+      id: 1
+      author: vStatsenko
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: is_moderator
+                  type: TINYINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reg_time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: code
+                  type: varchar(255)
+              - column:
+                  name: photo
+                  type: TEXT
+        - createTable:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: TINYINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: moderation_status
+                  type: ENUM("NEW","ACCEPTED","DECLINED")
+                  constraints:
+                    nullable: false
+              - column:
+                  name: moderator_id
+                  type: INT
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: view_count
+                  type: INT
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: post_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: TINYINT
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: tags
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: post_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tag_id
+                  type: INT
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: parent_id
+                  type: INT
+              - column:
+                  name: post_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: TEXT
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: captcha_codes
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: time
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: code
+                  type: TINYTEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: secret_code
+                  type: TINYTEXT
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: global_settings
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: code
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 2
+      author: vStastenko
+      comment: "add data db"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: is_moderator
+                  value: 1
+              - column:
+                  name: reg_time
+                  value: "2020-12-02 12:25:25"
+              - column:
+                  name: name
+                  value: "Vlad"
+              - column:
+                  name: email
+                  value: "dddd@mail.ru"
+              - column:
+                  name: password
+                  value: "$2y$12$8kieDgFZXUSj81I7Td/HXOEjL42qEQOkNvE6L7yuDxP.YFLEmnwxW"
+              - column:
+                  name: code
+                  value: "TITLE"
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: time
+                  value: "2020-12-02 12:35:25"
+              - column:
+                  name: title
+                  value: "TITLE"
+              - column:
+                  name: 'text'
+                  value: "rivet"
+              - column:
+                  name: view_count
+                  value: 0
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "JAVA"
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: time
+                  value: "2020-12-02 12:25:25"
+              - column:
+                  name: value
+                  value: 1
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: tag_id
+                  value: 1
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: parent_id
+                  value: 1
+              - column:
+                  name: post_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: time
+                  value: "2021-01-02 12:25:25"
+              - column:
+                  name: text
+                  value: "nice"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: is_moderator
+                  value: 1
+              - column:
+                  name: reg_time
+                  value: "2021-02-02 12:25:25"
+              - column:
+                  name: name
+                  value: "Alex"
+              - column:
+                  name: email
+                  value: "ddd@mail.ru"
+              - column:
+                  name: password
+                  value: "$2y$12$8kieDgFZXUSj81I7Td/HXOEjL42qEQOkNvE6L7yuDxP.YFLEmnwxW"
+              - column:
+                  name: code
+                  value: "TITLE"
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "ACCEPTED"
+              - column:
+                  name: moderator_id
+                  value: 2
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: time
+                  value: "2020-03-02 12:35:25"
+              - column:
+                  name: title
+                  value: "POST"
+              - column:
+                  name: 'text'
+                  value: "Откройте файл API.pdf и изучите запросы, которые требуется реализовать в результате работы над дипломом.
+
+                                        При запуске проекта и перехода у вас будет открыта страница с ошибкой 404, так как запросы, которые отправляет фронтенд не реализованы в нашем приложении. Задача этого этапа реализовать запросы главной страницы чтобы открывалась главная страница без ошибок."
+              - column:
+                  name: view_count
+                  value: 3
+        - insert:
+            tableName: tags
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: "PHP"
+        - insert:
+            tableName: post_votes
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: post_id
+                  value: 2
+              - column:
+                  name: time
+                  value: "2020-04-02 12:25:25"
+              - column:
+                  name: value
+                  value: 4
+        - insert:
+            tableName: tag2post
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: post_id
+                  value: 2
+              - column:
+                  name: tag_id
+                  value: 1
+        - insert:
+            tableName: post_comments
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: parent_id
+                  value: 2
+              - column:
+                  name: post_id
+                  value: 2
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: time
+                  value: "2021-04-02 12:35:25"
+              - column:
+                  name: text
+                  value: "wow"
+  - changeSet:
+      id: 3
+      author: vStastenko
+      comment: "add data db"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: is_moderator
+                  value: 0
+              - column:
+                  name: reg_time
+                  value: "2021-02-02 12:25:25"
+              - column:
+                  name: name
+                  value: "Victor"
+              - column:
+                  name: email
+                  value: "dd@mail.ru"
+              - column:
+                  name: password
+                  value: "$2y$12$8kieDgFZXUSj81I7Td/HXOEjL42qEQOkNvE6L7yuDxP.YFLEmnwxW"
+              - column:
+                  name: code
+                  value: "JAVA"
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: is_active
+                  value: 0
+              - column:
+                  name: moderation_status
+                  value: "NEW"
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 3
+              - column:
+                  name: time
+                  value: "2020-12-02 12:35:25"
+              - column:
+                  name: title
+                  value: "JAVA"
+              - column:
+                  name: 'text'
+                  value: "java web"
+              - column:
+                  name: view_count
+                  value: 51
+        - insert:
+            tableName: posts
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: is_active
+                  value: 1
+              - column:
+                  name: moderation_status
+                  value: "NEW"
+              - column:
+                  name: moderator_id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 3
+              - column:
+                  name: time
+                  value: "2020-12-02 12:35:25"
+              - column:
+                  name: title
+                  value: "PYTHON"
+              - column:
+                  name: 'text'
+                  value: "PYTHON web"
+              - column:
+                  name: view_count
+                  value: 7
+      rollback:
+        - delete:
+            tableName: users
+            where: id in (1,2)
+        - delete:
+            tableName: posts
+            where: id in (1,2)
+        - delete:
+            tableName: tags
+            where: id in (1,2)
+        - delete:
+            tableName: post_comments
+            where: id in (1,2)

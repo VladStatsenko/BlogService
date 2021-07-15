@@ -10,7 +10,7 @@ diffChangeLogFile: /src/main/resources/db/changelog/db.changelog-@timestamp@.yam
 ignoreClasspathPrefix: true
 
 spring.mail.host: smtp.gmail.com
-spring.mail.port: 587
+spring.mail.port: 465
 spring.mail.username: vladStatsenko1@gmail.com
 spring.mail.password: rfhfcbrbQ1
 spring.mail.properties.mail.smtp.auth: true

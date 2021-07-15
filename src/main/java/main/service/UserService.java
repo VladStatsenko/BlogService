@@ -33,6 +33,9 @@ public class UserService {
     @Value("${blog.maxFileSize}")
     private int maxFileSize;
 
+    @Value("${spring.mail.username}")
+    private String mailSend;
+
     private final UserRepository userRepository;
     private final CaptchaRepository captchaRepository;
     private final EmailService emailService;
@@ -239,7 +242,7 @@ public class UserService {
                     .append("/login/change-password/")
                     .append(code);
 
-            emailService.sendSimpleEmail("vladStatsenko1@gmail.com", user.getEmail(), "Password restore", message.toString());
+            emailService.sendSimpleEmail(mailSend, user.getEmail(), "Password restore", message.toString());
         }
         return response;
 

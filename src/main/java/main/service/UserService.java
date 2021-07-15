@@ -222,7 +222,7 @@ public class UserService {
         RestoreResponse response = new RestoreResponse();
         response.setResult(true);
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("user not found"));
+                .orElse(null);
         if (user == null) {
             response.setResult(false);
         }

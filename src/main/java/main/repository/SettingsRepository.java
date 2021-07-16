@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface SettingsRepository extends JpaRepository<GlobalSettings,Integer> {
+public interface SettingsRepository extends JpaRepository<GlobalSettings,Long> {
 
     @Modifying
     @Transactional
@@ -18,6 +18,6 @@ public interface SettingsRepository extends JpaRepository<GlobalSettings,Integer
             nativeQuery = true)
     void insertSettings(@Param("code") String code, @Param("value") String value);
 
-    @Query(value = "SELECT s.value FROM global_settings s WHERE s.code = :code", nativeQuery = true)
+    @Query(value = "SELECT s.* FROM global_settings s WHERE s.code = :code", nativeQuery = true)
     GlobalSettings findAllGlobalSettings(@Param("code") String code);
 }

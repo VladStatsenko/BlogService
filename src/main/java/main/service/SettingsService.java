@@ -6,6 +6,8 @@ import main.model.User;
 import main.repository.SettingsRepository;
 import main.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +48,7 @@ public class SettingsService {
      * @param principal
      * @return
      */
-    public Boolean putSettings(SettingsRequest settingsRequest, Principal principal) {
+    public ResponseEntity<Boolean> putSettings(SettingsRequest settingsRequest, Principal principal) {
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
         if (user == null || user.getIsModerator() != 1) {
@@ -59,6 +61,6 @@ public class SettingsService {
         settingsRepository.insertSettings("MULTIUSER_MODE", MULTIUSER_MODE);
         settingsRepository.insertSettings("POST_PREMODERATION", POST_PREMODERATION);
         settingsRepository.insertSettings("STATISTICS_IS_PUBLIC", STATISTICS_IS_PUBLIC);
-        return true;
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

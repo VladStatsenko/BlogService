@@ -50,7 +50,7 @@ public class ApiGeneralController {
 
     @PutMapping("/settings")
     @PreAuthorize(value = "hasAuthority('user:moderate')")
-    public Boolean putSettings(@RequestBody SettingsRequest request, Principal principal) {
+    public ResponseEntity putSettings(@RequestBody SettingsRequest request, Principal principal) {
         return settingsService.putSettings(request, principal);
     }
 

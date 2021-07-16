@@ -27,9 +27,10 @@ public class SettingsService {
 
     /**
      * Метод возвращает глобальные настройки блога из таблицы global_settings.
+     *
      * @return
      */
-    public SettingsResponse getGlobalSettings(){
+    public SettingsResponse getGlobalSettings() {
         SettingsResponse settingsResponse = new SettingsResponse();
         settingsResponse.setMultiuserMode(settingsRepository.findAllGlobalSettings("MULTIUSER_MODE").getValue().equals("YES"));
         settingsResponse.setPostPremoderation(settingsRepository.findAllGlobalSettings("POST_PREMODERATION").getValue().equals("YES"));
@@ -40,14 +41,15 @@ public class SettingsService {
     /**
      * Метод записывает глобальные настройки блога в таблицу global_settings, если запрашивающий
      * пользователь авторизован и является модератором.
+     *
      * @param settingsRequest
      * @param principal
      * @return
      */
-    public Boolean putSettings(SettingsRequest settingsRequest, Principal principal){
+    public Boolean putSettings(SettingsRequest settingsRequest, Principal principal) {
         User user = userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
-        if (user==null || user.getIsModerator()!=1){
+        if (user == null || user.getIsModerator() != 1) {
             return null;
         }
         String MULTIUSER_MODE = settingsRequest.isMultiuserMode() ? "YES" : "NO";

@@ -91,7 +91,7 @@ public class LoginService {
         userBody.setModeration(currentUser.getIsModerator() == 1);
         userBody.setId(currentUser.getId());
         userBody.setPhoto(currentUser.getPhoto());
-        userBody.setModerationCount(postRepository.findPostIsModerate(email));
+        userBody.setModerationCount(postRepository.findPostIsModerate());
         userBody.setSettings(currentUser.getIsModerator() == 1);
         loginResponse.setUser(userBody);
         return loginResponse;
